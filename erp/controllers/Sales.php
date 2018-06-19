@@ -6102,6 +6102,7 @@ class Sales extends MY_Controller
         }
 
         if ($this->form_validation->run() == true && $return_id = $this->sales_model->returnSale($data, $products, $payment)) {
+            $this->db->set('pp','pp'+1)->update('erp_order_ref');
             $this->session->set_flashdata('message', lang("return_sale_added"));
 			redirect("sales/invoice_return_set/".$return_id);
 		
