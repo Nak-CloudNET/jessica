@@ -17,7 +17,7 @@
 	//var $biller = $("#slbiller");
 		$(window).load(function(){
 			<?php if($Admin || $Owner){ ?>
-			billerChange();
+			//billerChange();
 			<?php } ?>
 		});
 
@@ -153,10 +153,10 @@
         }
 		$("#slbiller").change(function(){
 			<?php if($Admin || $Owner){ ?>
-			billerChange();
+			//billerChange();
 			<?php } ?>
 			//$("#slwarehouse").select2("val", "<?=$Settings->default_warehouse;?>");
-			$('#slwarehouse').val($('#slwarehouse option:first-child').val()).trigger('change');
+			//$('#slwarehouse').val($('#slwarehouse option:first-child').val()).trigger('change');
 		});
         $(document).on('change', '.paid_by', function () {
             var p_val = $(this).val();
@@ -757,7 +757,7 @@
 												foreach ($warehouses as $warehouse) {
 													$wh[$warehouse->id] = $warehouse->name;
 												}
-												echo form_dropdown('warehouse', '', (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="slwarehouse" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" style="width:100%; pointer-events: none;" ');
+												echo form_dropdown('warehouse', $wh, $inv->warehouse_id?$inv->warehouse_id:'', 'id="slwarehouse" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" style="width:100%;pointer-events: none; " ');
 												?>
 											</div>
 										</div>
