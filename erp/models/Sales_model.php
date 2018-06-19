@@ -2704,7 +2704,16 @@ class Sales_model extends CI_Model
                 $this->db->insert('payments', $payment);
                 if ($this->site->getReference('sp') == $data['reference_no']) {
                     $this->site->updateReference('sp');
-                }			
+                }
+                if($data['paid_by'] == "deposit"){
+                    if ($this->site->getReference('pay',$data['biller_id']) == $payment['reference_no']) {
+                        $this->site->updateReference('pay',$data['biller_id']);
+                    }
+                }else{
+                    if ($this->site->getReference('pp',$data['biller_id']) == $payment['reference_no']) {
+                        $this->site->updateReference('pp',$data['biller_id']);
+                    }
+                }
 				
             }
 			$this->calculateSaleTotalsReturn($data['sale_id'], $return_id, $data['surcharge']);
