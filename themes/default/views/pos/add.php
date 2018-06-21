@@ -396,7 +396,7 @@ if ($q->num_rows() > 0) {
 										<?php
 										echo form_input('customer', (isset($_POST['customer']) ? $_POST['customer'] : ""), 'id="poscustomer" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("customer") . '" required="required" class="form-control pos-input-tip" style="width:100%;"');
 										?>
-										
+
 										<div class="input-group-addon no-print" style="padding: 2px 5px; border-left: 0;">
 											<a href="#" id="view-customer" class="external" data-toggle="modal" data-target="#myModal">
 												<i class="fa fa-2x fa-user" id="addIcon"></i>
@@ -413,7 +413,7 @@ if ($q->num_rows() > 0) {
 									<div style="clear:both;"></div>
 								</div>
 								<div class="no-print">
-									<?php if ($Owner || $Admin) { ?>
+									<?php if ($Owner || $Admin || !$this->session->userdata('warehouse_id')) { ?>
 										<div class="form-group col-md-6">
 											<?php
 											$wh[''] = '';
@@ -422,7 +422,7 @@ if ($q->num_rows() > 0) {
 											}
 											echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="poswarehouse" class="form-control pos-input-tip" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("warehouse") . '" required="required" style="width:100%;" ');
 											?>
-											
+
 										</div>
 									<?php } else { ?>
 
@@ -432,11 +432,12 @@ if ($q->num_rows() > 0) {
 											foreach ($user_ware as $warehouse) {
 												$wh[$warehouse->id] = $warehouse->name;
 											}
-											echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="poswarehouse" class="form-control pos-input-tip" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("warehouse") . '" required="required" style="width:100%;" ');
+                                            $user_default_warehouse = $this->session->userdata('warehouse_id');
+											echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $user_default_warehouse), 'id="poswarehouse" class="form-control pos-input-tip" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("warehouse") . '" required="required" style="width:100%;" ');
 											?>
-											
+
 										</div>
-									
+
 									<?php } ?>
 								</div>
 							</div>
@@ -472,10 +473,9 @@ if ($q->num_rows() > 0) {
 						<div id="left-top">
                             <div style="position: absolute; <?= $Settings->rtl ? 'right:-9999px;' : 'left:-9999px;'; ?>"><?php echo form_input('test', '', 'id="test" class="kb-pad"'); ?></div>
 							<div class="col-md-6" style="padding-left:0; margin-bottom: 5px">
-								<?php if ($Owner || $Admin) { ?>
-                                    <div class="form-group">
-                                    <?php if ($Owner || $Admin || $GP['customers-add']) { ?><div class="input-group"><?php } ?>
-                                        <?php
+                                <div class="form-group">
+                                   	<div class="input-group">
+                                    <?php
                                         echo form_input('customer', (isset($_POST['customer']) ? $_POST['customer'] : ""), 'id="poscustomer" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("customer") . '" required="required" class="form-control pos-input-tip" style="width:100%;"');
                                         ?>
                                         <div class="input-group-addon no-print" style="padding: 2px 5px; border-left: 0;">
@@ -489,40 +489,12 @@ if ($q->num_rows() > 0) {
                                                 <i class="fa fa-2x fa-plus-circle" id="addIcon"></i>
                                             </a>
                                         </div>
+                                    	<?php } ?>
                                     </div>
-                                    <?php } ?>
                                     <div style="clear:both;"></div>
                                 </div>
-                                <?php } else { ?>
-                                    <div class="row">
-                                        <div class="form-group">
-                                            <div class="col-sm-11" style="padding-right: 0">
-                                                <?php if ($Owner || $Admin || $GP['customers-add']) { ?><div class="input-group"><?php } ?>
-                                                    <?php
-                                                    echo form_input('customer', (isset($_POST['customer']) ? $_POST['customer'] : ""), 'id="poscustomer" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("customer") . '" required="required" class="form-control pos-input-tip" style="width:100%;"');
-                                                    ?>
-                                            </div>
-                                            <div class="col-sm-1" style="padding-left: 0">
-                                                <div class="input-group-addon no-print" style="padding: 2px 5px; border-left: 0; border-right: 1px solid #CCC">
-                                                    <a href="#" id="view-customer" class="external" data-toggle="modal" data-target="#myModal">
-                                                        <i class="fa fa-2x fa-user" id="addIcon"></i>
-                                                    </a>
-                                                </div>
-                                                <?php if ($Owner || $Admin || $GP['customers-add']) { ?>
-                                                <div class="input-group-addon no-print" style="padding: 2px 5px;">
-                                                    <a href="<?= site_url('customers/add_customer_pos'); ?>" id="add-customer" class="external" data-toggle="modal" data-target="#myModal">
-                                                        <i class="fa fa-2x fa-plus-circle" id="addIcon"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                                <?php } ?>
-                                            </div>
-                                        </div>
-                                        <div style="clear:both;"></div>
-                                    </div>
-                                <?php } ?>
                             </div>
-							<?php if ($Owner || $Admin) { ?>
+							<?php if ($Owner || $Admin || !$this->session->userdata('warehouse_id')) { ?>
 								<div class="col-md-6" style="padding-right:0;">
 									<div class="form-group">
 										<?php
@@ -542,11 +514,12 @@ if ($q->num_rows() > 0) {
 									foreach ($user_ware as $warehouse) {
 										$wh[$warehouse->id] = $warehouse->name;
 									}
-									echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="poswarehouse" class="form-control pos-input-tip" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("warehouse") . '" required="required" style="width:100%;" ');
+                                    $user_default_warehouse = $this->session->userdata('warehouse_id');
+									echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $user_default_warehouse), 'id="poswarehouse" class="form-control pos-input-tip" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("warehouse") . '" required="required" style="width:100%;" ');
 									?>
-									
+
 								</div>
-										
+
 							<?php } ?>
 							<div class="col-md-12" style="padding:0;">
 								<div class="no-print">
@@ -2692,6 +2665,8 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
     $(window).bind("resize", widthFunctions);
 	
     $(document).ready(function () {
+
+    	$('#poswarehouse').val($('#poswarehouse option:first-child').val());
 		
 		$('#view-customer').click(function(){
 			
