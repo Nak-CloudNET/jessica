@@ -2665,8 +2665,6 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
     $(window).bind("resize", widthFunctions);
 	
     $(document).ready(function () {
-
-    	$('#poswarehouse').val($('#poswarehouse option:first-child').val());
 		
 		$('#view-customer').click(function(){
 			
